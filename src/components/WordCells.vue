@@ -13,7 +13,12 @@ export default {
   props:['word'],
   data(){
     return{
-      inputLetters: store.currentWord
+      //inputLetters: store.currentWord
+    }
+  },
+  computed:{
+    inputLetters: function(){
+      return store.currentWord
     }
   },
   watch: {

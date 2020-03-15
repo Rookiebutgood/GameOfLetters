@@ -1,5 +1,5 @@
 <template>
-  <button @click="enterLetter(letter)" :class={active}>
+  <button @click="enterLetter(letter)" >
     {{letter}}
   </button>
 </template>
@@ -11,7 +11,7 @@ export default {
   props: ['letter'],
   data(){
     return{
-      active: true
+      active: false
     }
   },
   methods: {

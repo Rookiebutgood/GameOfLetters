@@ -5,7 +5,8 @@
     </div>
     <div class="letters">
       <LetterTile v-for="(letter, index) in shuffleWord" :key="index" :letter="letter"/>
-       <button @click="resetWord()">RESET</button>
+      <button @click="resetWord">RESET</button>
+       <button @click="startGame">TETD</button>
     </div>
     <div class="message">
       <h2>Вы выиграли! Повторить?”</h2>
@@ -24,6 +25,11 @@ import LetterTile from './components/LetterTile'
 import WordCells from './components/WordCells'
 import {store} from '../store'
 
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+
 export default {
   name: 'App',
   components: {
@@ -33,12 +39,14 @@ export default {
   data() {
     return{
       alreadyUsedNumbers: [],
+      store,
+      word: 'какое то слово'
     }
   },
   computed: {
-    word: function(){
-      return 'слово'
-    },
+    // word: function() {
+    //   return 'ckjdj'
+    // },
      shuffleWord: function(){
        let a = this.word.split(""),
        n = a.length;
@@ -55,6 +63,24 @@ export default {
   methods:{
     resetWord: function() {
       return store.reset()
+    },
+        startGame: function(){
+      let number = getRandomNumber(2, 1369);
+      let t = this
+      axios.get(`https://apidir.pfdo.ru/v1/directory-program-activities/${number}`)
+      .then(function (response) {
+        if(response.data.result_code === "FLSCS") {
+      //alreadyUsedNumbers.push(number);
+          console.log(response.data.data.name.toUpperCase());
+          console.log(t)
+          t.word = response.data.data.name.toUpperCase();
+        } else {
+          this.startGame()
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   }
 }
