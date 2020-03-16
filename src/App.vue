@@ -36,8 +36,6 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
 
-$color: #ffffff;
-
 *{
   font-family: "Roboto Slab";
   margin: 0;
