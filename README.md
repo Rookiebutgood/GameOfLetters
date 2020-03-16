@@ -22,3 +22,8 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+доделать таймер --
+сортировка в таблице рекордов
+красоту навести
+сделать нормальный цикл игры

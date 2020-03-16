@@ -1,116 +1,104 @@
 <template>
   <div id="app">
-    <div class="cells">
-      <WordCells :word="word"/>
-    </div>
-    <div class="letters">
-      <LetterTile v-for="(letter, index) in shuffleWord" :key="index" :letter="letter"/>
-      <button @click="resetWord">RESET</button>
-       <button @click="startGame">TETD</button>
-    </div>
-    <div class="message">
-      <h2>Вы выиграли! Повторить?”</h2>
-      <button>Конечно</button>
-      <button>Я уже устал</button>
-    </div>
-    <div class="table">
-      <p>порядковый номер слово и время</p>
-    </div>
+    <Game />
+    <Message />
+    <RecordTable />
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import LetterTile from './components/LetterTile'
-import WordCells from './components/WordCells'
+import Game from './components/Game'
+import Message from './components/Message'
+import RecordTable from './components/RecordTable'
 import {store} from '../store'
-
-function getRandomNumber(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
 
 export default {
   name: 'App',
   components: {
-    LetterTile,
-    WordCells
+    Game,
+    Message,
+    RecordTable
   },
   data() {
     return{
       alreadyUsedNumbers: [],
       store,
-      word: 'какое то слово'
+      word: 'слово'
     }
   },
-  computed: {
-    // word: function() {
-    //   return 'ckjdj'
-    // },
-     shuffleWord: function(){
-       let a = this.word.split(""),
-       n = a.length;
-
-        for(let i = n - 1; i > 0; i--) {
-          let j = Math.floor(Math.random() * (i + 1));
-          let tmp = a[i];
-          a[i] = a[j];
-          a[j] = tmp;
-        }
-        return a.join('')
-      }
-  },
-  methods:{
-    resetWord: function() {
-      return store.reset()
-    },
-        startGame: function(){
-      let number = getRandomNumber(2, 1369);
-      let t = this
-      axios.get(`https://apidir.pfdo.ru/v1/directory-program-activities/${number}`)
-      .then(function (response) {
-        if(response.data.result_code === "FLSCS") {
-      //alreadyUsedNumbers.push(number);
-          console.log(response.data.data.name.toUpperCase());
-          console.log(t)
-          t.word = response.data.data.name.toUpperCase();
-        } else {
-          this.startGame()
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
+  mounted(){
+    store.startGame()
   }
 }
 
-// function getRandomNumber(min, max) {
-//   return Math.floor(Math.random() * (max - min)) + min;
-// }
-
-//let number = getRandomNumber(2, 1369);
-let number = 50;
-console.log(number)
-
-// function getNewWord(){
-
-// }
-axios.get(`https://apidir.pfdo.ru/v1/directory-program-activities/${number}`)
-  .then(function (response) {
-    // handle success
-    if(response.data.result_code === "FLSCS") {
-      //alreadyUsedNumbers.push(number);
-      console.log(response.data.data.name.toUpperCase());
-    }
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  });
-
 </script>
 
-<style>
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
 
+$color: #ffffff;
+
+*{
+  font-family: "Roboto Slab";
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  width: 100%;
+  height: 100%;
+  background: #4a69bb;
+  overflow: hidden;
+}
+#app{
+  background: #4a69bb
+}
+.button{
+  background: #9aceff;
+  border: none;
+  border-radius: 10px;
+  margin: 10px;
+  color: #550a46;
+  box-shadow: 0 0 5px 1px rgba(0,0,0,.5);
+  outline: none;
+  font-size: 24px;
+  &:active{
+    background: #617be3;
+    box-shadow: none;
+  }
+}
+
+.popup{
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #ffffff;
+  border-radius: 10px;
+  min-width: 40%;
+  padding: 10px;
+  &_visible{
+    display: block;
+  }
+  &__title{
+    text-align: center;
+    color: #550a46;
+  }
+  &__button{
+    border: 1px solid #550a46;
+    border-radius: 10px;
+    background: none;
+    padding: 10px 20px;
+    margin: 10px;
+    color: #550a46;
+    cursor: pointer;
+    outline: none;
+    &:active{
+      background: #617be3;
+      border-color: #617be3;
+      color: #fff;
+    }
+  }
+}
 </style>
