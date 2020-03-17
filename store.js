@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+let timer;
+
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -39,20 +41,21 @@ export const store = {
     this.currentWord.push(letter);
   },
   resetWord() { //сброс букв
-     this.currentWord = [];
-     this.hiddenLetters = [];
+    this.currentWord = [];
+    this.hiddenLetters = [];
   },
   startTimer(){ //запуск таймера
     let t = this
-    setInterval(function() {
+    timer = setInterval(function() {
       if(t.isGameActive) {
         t.time++;
       }
-     },1000)
+    },1000)
   },
   resetTimer() {//сброс таймера при правильном слове
     this.time = 0;
     this.isGameActive = false;
+    clearInterval(timer);
   },
   addTableRecord(record) { //добавление записи с результатами игрока
     let oldTime = record.time;
